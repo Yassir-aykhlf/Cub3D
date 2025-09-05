@@ -1,0 +1,11 @@
+file
+Makefile
+.DS_Store
+./gnlTester/
+/gnlTester
+/get_next_line_main.c
+./get_next_line_main.c
+get_next_line_main.c
+gnlTester
+*.o
+*.a
