@@ -15,7 +15,6 @@ A 3D raycasting engine implementation inspired by the classic Wolfenstein 3D gam
 - [Build System](#build-system)
 - [Technical Details](#technical-details)
 - [Testing](#testing)
-- [Contributing](#contributing)
 
 ## Overview
 
