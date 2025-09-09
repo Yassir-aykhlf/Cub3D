@@ -3,13 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lazmoud <lazmoud@student.1337.ma>          +#+  +:+       +#+        */
+/*   By: yaykhlf <yaykhlf@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/08/22 20:22:14 by lazmoud           #+#    #+#             */
-/*   Updated: 2025/08/22 20:23:19 by lazmoud          ###   ########.fr       */
+/*   Created: 2025/09/09 09:52:59 by yaykhlf           #+#    #+#             */
+/*   Updated: 2025/09/09 10:07:30 by yaykhlf          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
-#include <cube.h>
+
+#include "cube.h"
 
 int	main(int ac, char **av)
 {

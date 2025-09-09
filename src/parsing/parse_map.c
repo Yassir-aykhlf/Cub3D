@@ -3,12 +3,13 @@
 /*                                                        :::      ::::::::   */
 /*   parse_map.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lazmoud <lazmoud@student.1337.ma>          +#+  +:+       +#+        */
+/*   By: yaykhlf <yaykhlf@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/08/20 11:25:10 by lazmoud           #+#    #+#             */
-/*   Updated: 2025/08/21 10:27:14 by lazmoud          ###   ########.fr       */
+/*   Created: 2025/09/09 10:10:18 by yaykhlf           #+#    #+#             */
+/*   Updated: 2025/09/09 10:36:52 by yaykhlf          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
+
 #include <cube.h>
 
 int	is_player(int c)

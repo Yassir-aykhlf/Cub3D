@@ -3,12 +3,13 @@
 /*                                                        :::      ::::::::   */
 /*   lexer.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lazmoud <lazmoud@student.1337.ma>          +#+  +:+       +#+        */
+/*   By: yaykhlf <yaykhlf@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/08/14 15:04:43 by lazmoud           #+#    #+#             */
-/*   Updated: 2025/08/20 16:26:03 by lazmoud          ###   ########.fr       */
+/*   Created: 2025/09/09 10:14:50 by yaykhlf           #+#    #+#             */
+/*   Updated: 2025/09/09 10:36:52 by yaykhlf          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
+
 #include <cube.h>
 
 char	lexer_current_char(t_lexer_state *lexer)

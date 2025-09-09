@@ -5,8 +5,8 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: yaykhlf <yaykhlf@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/08/07 14:58:25 by lazmoud           #+#    #+#             */
-/*   Updated: 2025/08/24 19:35:25 by yaykhlf          ###   ########.fr       */
+/*   Created: 2025/09/09 10:09:34 by yaykhlf           #+#    #+#             */
+/*   Updated: 2025/09/09 10:16:42 by yaykhlf          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 int	init_screen_buffer(t_game *game)
 {
 	game->screen_buffer.img_ptr = mlx_new_image(game->window.mlx_ptr,
-			SCREEN_WIDTH, SCREEN_HEIGHT);
+			WINDOW_WIDTH, WINDOW_HEIGHT);
 	if (!game->screen_buffer.img_ptr)
 	{
 		perror("Failed to create screen buffer");

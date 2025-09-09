@@ -6,7 +6,7 @@
 /*   By: yaykhlf <yaykhlf@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/13 09:37:51 by yaykhlf           #+#    #+#             */
-/*   Updated: 2025/09/05 11:34:13 by yaykhlf          ###   ########.fr       */
+/*   Updated: 2025/09/09 10:36:52 by yaykhlf          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@ void	put_pixel_to_image(t_image *img, int x, int y, int color)
 {
 	char	*dst;
 
-	if (x < 0 || x >= SCREEN_WIDTH || y < 0 || y >= SCREEN_HEIGHT)
+	if (x < 0 || x >= WINDOW_WIDTH || y < 0 || y >= WINDOW_HEIGHT)
 		return ;
 	dst = img->addr + (y * img->line_len + x * (img->bpp / 8));
 	*(unsigned int *)dst = color;
@@ -52,7 +52,6 @@ int	render_next_frame(t_game *game)
 	update_player_state(game);
 	limit_frame_rate(game);
 	cast_all_rays(game);
-	render_minimap(game);
 	mlx_put_image_to_window(game->window.mlx_ptr,
 		game->window.window, game->screen_buffer.img_ptr, 0, 0);
 	return (0);

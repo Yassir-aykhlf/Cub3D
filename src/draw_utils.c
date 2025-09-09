@@ -6,7 +6,7 @@
 /*   By: yaykhlf <yaykhlf@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/05 12:35:00 by yaykhlf           #+#    #+#             */
-/*   Updated: 2025/09/05 14:33:25 by yaykhlf          ###   ########.fr       */
+/*   Updated: 2025/09/09 10:16:42 by yaykhlf          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,8 +21,8 @@ static void	draw_textured_wall(t_game *game, t_ray *ray, int x, int y)
 	int		line_height;
 
 	tex_index = get_wall_texture_index(ray);
-	line_height = (int)(SCREEN_HEIGHT / ray->perp_wall_dist);
-	tex_pos = (y - SCREEN_HEIGHT / 2 + line_height / 2)
+	line_height = (int)(WINDOW_HEIGHT / ray->perp_wall_dist);
+	tex_pos = (y - WINDOW_HEIGHT / 2 + line_height / 2)
 		* game->textures[tex_index].height / line_height;
 	tex_y = (int)tex_pos;
 	if (tex_y < 0)
@@ -42,13 +42,13 @@ static void	draw_wall_pixel(t_game *game, t_ray *ray, int x, int y)
 
 	if (ray->perp_wall_dist <= 0.0)
 		ray->perp_wall_dist = 0.001;
-	line_height = (int)(SCREEN_HEIGHT / ray->perp_wall_dist);
-	draw_start = -line_height / 2 + SCREEN_HEIGHT / 2;
+	line_height = (int)(WINDOW_HEIGHT / ray->perp_wall_dist);
+	draw_start = -line_height / 2 + WINDOW_HEIGHT / 2;
 	if (draw_start < 0)
 		draw_start = 0;
-	draw_end = line_height / 2 + SCREEN_HEIGHT / 2;
-	if (draw_end >= SCREEN_HEIGHT)
-		draw_end = SCREEN_HEIGHT - 1;
+	draw_end = line_height / 2 + WINDOW_HEIGHT / 2;
+	if (draw_end >= WINDOW_HEIGHT)
+		draw_end = WINDOW_HEIGHT - 1;
 	tex_index = get_wall_texture_index(ray);
 	if (y < draw_start)
 		put_pixel_to_image(&game->screen_buffer, x, y,
@@ -84,7 +84,7 @@ void	draw_vertical_line(t_game *game, t_ray *ray, int x)
 	tex_index = get_wall_texture_index(ray);
 	setup_texture_coords(game, ray, tex_index);
 	y = 0;
-	while (y < SCREEN_HEIGHT)
+	while (y < WINDOW_HEIGHT)
 	{
 		draw_wall_pixel(game, ray, x, y);
 		y++;

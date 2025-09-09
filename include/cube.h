@@ -6,7 +6,7 @@
 /*   By: yaykhlf <yaykhlf@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/13 09:27:24 by yaykhlf           #+#    #+#             */
-/*   Updated: 2025/09/05 15:44:35 by yaykhlf          ###   ########.fr       */
+/*   Updated: 2025/09/09 10:36:52 by yaykhlf          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,8 +27,6 @@
 
 # define WINDOW_WIDTH 480
 # define WINDOW_HEIGHT 480
-# define SCREEN_WIDTH WINDOW_WIDTH
-# define SCREEN_HEIGHT WINDOW_HEIGHT
 # define TARGET_FPS 60
 # define MSEC_PER_FRAME 16666
 # define MSEC 1000000
@@ -160,15 +158,12 @@ typedef struct s_lines
 typedef struct s_map
 {
 	const char	*config_file_path;
-	/* Textures */
 	char		*north_texture;
 	char		*south_texture;
 	char		*west_texture;
 	char		*east_texture;
-	/* colors */
 	int			ceiling_color;
 	int			floor_color;
-	/* the acutal map */
 	t_lines		grid;
 	int			player_x;
 	int			player_y;
@@ -254,7 +249,6 @@ void			update_player_state(t_game *game);
 /* Rendering functions */
 int				render_next_frame(t_game *game);
 void			put_pixel_to_image(t_image *img, int x, int y, int color);
-void			render_minimap(t_game *game);
 void			clear_screen(t_game *game);
 void			draw_ceiling_and_floor(t_game *game, int x, int draw_start,
 					int draw_end);

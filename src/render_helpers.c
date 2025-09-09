@@ -6,7 +6,7 @@
 /*   By: yaykhlf <yaykhlf@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/05 12:48:40 by yaykhlf           #+#    #+#             */
-/*   Updated: 2025/09/05 12:48:41 by yaykhlf          ###   ########.fr       */
+/*   Updated: 2025/09/09 10:16:42 by yaykhlf          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@ void	draw_ceiling_and_floor(t_game *game, int x, int draw_start,
 	int	y;
 
 	y = 0;
-	while (y < SCREEN_HEIGHT)
+	while (y < WINDOW_HEIGHT)
 	{
 		if (y < draw_start)
 			put_pixel_to_image(&game->screen_buffer, x, y,
@@ -49,10 +49,10 @@ void	clear_screen(t_game *game)
 	int		y;
 
 	y = 0;
-	while (y < SCREEN_HEIGHT)
+	while (y < WINDOW_HEIGHT)
 	{
 		x = 0;
-		while (x < SCREEN_WIDTH)
+		while (x < WINDOW_WIDTH)
 		{
 			put_pixel_to_image(&game->screen_buffer, x, y, 0x00000000);
 			x++;
