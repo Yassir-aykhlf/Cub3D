@@ -36,45 +36,84 @@ Cub3D is a 3D graphics engine built from scratch using the MiniLibX graphics lib
 
 ```mermaid
 graph TB
-    A[Main Entry Point] --> B[Game Initialization]
-    B --> C[Config Parser]
-    B --> D[Graphics System]
-    B --> E[Game Engine]
+    %% Styling
+    classDef initClass fill:#e1f5fe,stroke:#01579b,stroke-width:2px
+    classDef parseClass fill:#f3e5f5,stroke:#4a148c,stroke-width:2px
+    classDef graphicsClass fill:#e8f5e8,stroke:#1b5e20,stroke-width:2px
+    classDef engineClass fill:#fff3e0,stroke:#e65100,stroke-width:2px
+    classDef loopClass fill:#ffebee,stroke:#b71c1c,stroke-width:2px
+    classDef utilsClass fill:#f5f5f5,stroke:#424242,stroke-width:2px
+
+    %% Main Entry and Initialization
+    START([Program Start]) --> INIT[Game Initialization]:::initClass
+    INIT --> PARSE[Configuration Parsing]:::parseClass
+    INIT --> GRAPHICS[Graphics System Setup]:::graphicsClass
+    INIT --> ENGINE[Game Engine Setup]:::engineClass
     
-    C --> C1[Lexer/Tokenizer]
-    C --> C2[Map Parser]
-    C --> C3[Texture Parser]
-    C --> C4[RGB Parser]
+    %% Configuration Parsing Layer
+    PARSE --> LEX[Lexer/Tokenizer<br/>• Token Classification<br/>• Syntax Validation]:::parseClass
+    PARSE --> MAP_PARSE[Map Parser<br/>• Grid Validation<br/>• Player Position<br/>• Boundary Checks]:::parseClass
+    PARSE --> TEX_PARSE[Texture Parser<br/>• File Path Validation<br/>• XPM Loading<br/>• Format Verification]:::parseClass
+    PARSE --> RGB_PARSE[RGB Parser<br/>• Color Validation<br/>• Range Checking<br/>• Format Parsing]:::parseClass
     
-    D --> D1[Window Manager]
-    D --> D2[Texture Loader]
-    D --> D3[Raycasting Engine]
-    D --> D4[Renderer]
+    %% Graphics System Architecture
+    GRAPHICS --> WIN_MGR[Window Manager<br/>• MLX Initialization<br/>• Event Registration<br/>• Screen Setup]:::graphicsClass
+    GRAPHICS --> TEX_LOAD[Texture Loader<br/>• Image Loading<br/>• Pixel Data Extraction<br/>• Memory Mapping]:::graphicsClass
+    GRAPHICS --> RAYCAST[Raycasting Engine<br/>• Ray Generation<br/>• Intersection Detection<br/>• Distance Calculation]:::graphicsClass
+    GRAPHICS --> RENDER[Renderer<br/>• Frame Buffer Management<br/>• Pixel Operations<br/>• Display Output]:::graphicsClass
     
-    E --> E1[Player System]
-    E --> E2[Movement Handler]
-    E --> E3[Event System]
+    %% Raycasting Engine Details
+    RAYCAST --> RAY_CALC[Ray Calculation<br/>• Direction Vectors<br/>• Screen Projection<br/>• Angle Computation]:::graphicsClass
+    RAYCAST --> DDA[DDA Algorithm<br/>• Grid Traversal<br/>• Step Calculation<br/>• Boundary Detection]:::graphicsClass
+    RAYCAST --> WALL_DET[Wall Detection<br/>• Collision Testing<br/>• Surface Normal<br/>• Hit Point Location]:::graphicsClass
+    RAYCAST --> DIST_CALC[Distance Calculation<br/>• Perpendicular Distance<br/>• Fisheye Correction<br/>• Wall Height Scaling]:::graphicsClass
     
-    D3 --> D3a[Ray Calculation]
-    D3 --> D3b[DDA Algorithm]
-    D3 --> D3c[Wall Detection]
-    D3 --> D3d[Distance Calculation]
+    %% Rendering Pipeline
+    RENDER --> SCREEN_BUF[Screen Buffer<br/>• Double Buffering<br/>• Pixel Array<br/>• Memory Alignment]:::graphicsClass
+    RENDER --> TEX_MAP[Texture Mapping<br/>• UV Coordinates<br/>• Texture Sampling<br/>• Color Interpolation]:::graphicsClass
+    RENDER --> PIXEL_DRAW[Pixel Drawing<br/>• Color Blending<br/>• Alpha Compositing<br/>• Performance Optimization]:::graphicsClass
     
-    D4 --> D4a[Screen Buffer]
-    D4 --> D4b[Texture Mapping]
-    D4 --> D4c[Pixel Drawing]
+    %% Game Engine Components
+    ENGINE --> PLAYER[Player System<br/>• Position Tracking<br/>• Orientation State<br/>• Collision Bounds]:::engineClass
+    ENGINE --> MOVEMENT[Movement Handler<br/>• Velocity Calculation<br/>• Collision Detection<br/>• Boundary Constraints]:::engineClass
+    ENGINE --> EVENTS[Event System<br/>• Input Mapping<br/>• State Management<br/>• Action Dispatching]:::engineClass
+    ENGINE --> PHYSICS[Physics System<br/>• Collision Response<br/>• Movement Validation<br/>• Boundary Enforcement]:::engineClass
     
-    F[Game Loop] --> G[Input Processing]
-    G --> H[Player Update]
-    H --> I[Raycasting]
-    I --> J[Rendering]
-    J --> K[Display]
-    K --> F
+    %% Main Game Loop
+    INIT --> GAME_LOOP{Game Loop}:::loopClass
+    GAME_LOOP --> INPUT[Input Processing<br/>• Keyboard Events<br/>• Mouse Movement<br/>• State Updates]:::loopClass
+    INPUT --> PLAYER_UPD[Player Update<br/>• Position Integration<br/>• Rotation Handling<br/>• State Validation]:::loopClass
+    PLAYER_UPD --> RAY_CAST[Raycasting Pass<br/>• Screen Ray Generation<br/>• World Intersection<br/>• Distance Sorting]:::loopClass
+    RAY_CAST --> FRAME_RENDER[Frame Rendering<br/>• Wall Drawing<br/>• Floor/Ceiling Fill<br/>• Buffer Composition]:::loopClass
+    FRAME_RENDER --> DISPLAY[Display Update<br/>• Buffer Swap<br/>• Screen Present<br/>• VSync Control]:::loopClass
+    DISPLAY --> FPS_LIMIT[FPS Limiting<br/>• Frame Time Control<br/>• Performance Monitoring]:::loopClass
+    FPS_LIMIT --> GAME_LOOP
     
-    L[Utils Layer] --> L1[Memory Management]
-    L --> L2[Data Structures]
-    L --> L3[Error Handling]
-    L --> L4[Map Validation]
+    %% Utility and Support Systems
+    UTILS[Utility Layer]:::utilsClass --> MEM_MGR[Memory Management<br/>• Allocation Tracking<br/>• Cleanup Automation<br/>• Leak Prevention]:::utilsClass
+    UTILS --> DATA_STRUCT[Data Structures<br/>• Vector Mathematics<br/>• Grid Representations<br/>• Efficient Collections]:::utilsClass
+    UTILS --> ERROR_HAND[Error Handling<br/>• Exception Management<br/>• Graceful Degradation<br/>• Debug Information]:::utilsClass
+    UTILS --> VALID[Validation Systems<br/>• Input Sanitization<br/>• Boundary Checking<br/>• Format Verification]:::utilsClass
+    
+    %% Cross-System Dependencies
+    PARSE -.-> UTILS
+    GRAPHICS -.-> UTILS
+    ENGINE -.-> UTILS
+    GAME_LOOP -.-> UTILS
+    
+    %% Data Flow Connections
+    MAP_PARSE --> PLAYER
+    TEX_LOAD --> TEX_MAP
+    WALL_DET --> TEX_MAP
+    PLAYER --> RAY_CALC
+    EVENTS --> MOVEMENT
+    MOVEMENT --> PHYSICS
+    PHYSICS --> PLAYER_UPD
+    
+    %% Exit Condition
+    INPUT --> EXIT{Exit Request?}:::loopClass
+    EXIT -->|Yes| CLEANUP[Cleanup & Exit]:::initClass
+    EXIT -->|No| PLAYER_UPD
 ```
 
 ## Installation
