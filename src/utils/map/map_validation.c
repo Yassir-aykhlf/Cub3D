@@ -6,7 +6,7 @@
 /*   By: yaykhlf <yaykhlf@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/21 14:48:10 by yaykhlf           #+#    #+#             */
-/*   Updated: 2025/09/05 15:44:35 by yaykhlf          ###   ########.fr       */
+/*   Updated: 2025/09/09 11:02:30 by yaykhlf          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,9 +36,6 @@ static int	validate_required_textures(t_map *map)
 	return (CUBE_SUCCESS);
 }
 
-/*
-** Initialize game structure and parse the configuration file
-*/
 int	validate_map(t_map *map)
 {
 	if (!map->grid.size)
@@ -54,9 +51,6 @@ int	validate_map(t_map *map)
 	return (CUBE_SUCCESS);
 }
 
-/*
-** Main flood fill validation function
-*/
 int	flood_fill_validate(t_map *map, int **visited, int x, int y)
 {
 	char			current_char;

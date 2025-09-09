@@ -6,7 +6,7 @@
 /*   By: yaykhlf <yaykhlf@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/05 12:00:00 by yaykhlf           #+#    #+#             */
-/*   Updated: 2025/09/05 15:44:35 by yaykhlf          ###   ########.fr       */
+/*   Updated: 2025/09/09 11:07:52 by yaykhlf          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,9 +35,6 @@ int	process_flood_fill_directions(t_map *map, int **visited, t_coord pos)
 	return (CUBE_SUCCESS);
 }
 
-/*
-** Main map wall validation function
-*/
 int	validate_map_walls(t_map *map)
 {
 	int		**visited;
