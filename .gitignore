@@ -9,3 +9,5 @@ get_next_line_main.c
 gnlTester
 *.o
 *.a
+*.so
+*.out
