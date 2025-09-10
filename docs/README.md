@@ -34,103 +34,83 @@ Cub3D is a 3D graphics engine built from scratch using the MiniLibX graphics lib
 ## System Architecture
 
 ```mermaid
----
-config:
-  layout: elk
----
+%% --- Cub3D Architectural Flowchart --- %%
 flowchart LR
-    %% Entry Point
-    START(["./cub3D map.cub"]) --> MAIN["main.c<br>• Argument validation<br>• Game structure setup"]
-    
-    %% Configuration Phase - Only Memory Operations
-    MAIN --> CONFIG_PARSE["Configuration Parser<br>parse_game_config.c<br>• Orchestrates parsing"]
-    
-    CONFIG_PARSE --> LEXER["Lexer System<br>lexer.c + tokenizer.c<br>• File reading<br>• Token classification<br>• Syntax validation"]
-    CONFIG_PARSE --> TEX_PARSER["Texture Config Parser<br>parse_*.c<br>• Read texture paths to memory<br>• Parse RGB values<br>• Store configuration only"]
-    CONFIG_PARSE --> MAP_PARSER["Map Config Parser<br>parse_map.c<br>• Read map grid to memory<br>• Basic syntax validation<br>• Store grid configuration"]
-    
-    %% Validation Phase - Separate Step
-    LEXER --> VALIDATION["Map Validation<br>map_validation.c<br>• Flood fill boundary check<br>• Player position validation<br>• Map integrity verification"]
-    TEX_PARSER --> VALIDATION
-    MAP_PARSER --> VALIDATION
-    
-    %% Initialization Phase - Actual Resource Loading
-    VALIDATION --> GAME_INIT["Game Initialization<br>game.c::init_game<br>• Game state setup<br>• System preparation"]
-    
-    GAME_INIT --> WINDOW_INIT["Window Setup<br>window.c<br>• MLX initialization<br>• Screen buffer creation"]
-    GAME_INIT --> TEX_INIT["Texture Loading<br>texture_loader.c<br>• XPM file reading<br>• Image data conversion<br>• Texture buffer creation"]
-    GAME_INIT --> PLAYER_INIT["Player Initialization<br>player.c<br>• Position setup<br>• Direction vectors"]
-    
-    %% Setup Connections
-    WINDOW_INIT --> SETUP_HOOKS["Event Hook Setup<br>events.c<br>• Key handlers<br>• Window events"]
-    TEX_INIT --> SETUP_HOOKS
-    PLAYER_INIT --> SETUP_HOOKS
-    
-    %% Main Game Loop - Adaptive Connections
-    SETUP_HOOKS --> MLX_LOOP["MLX Main Loop<br>mlx_loop<br>• Event processing<br>• Frame scheduling"]
-    
-    %% Parallel Event Processing
-    MLX_LOOP --> KEY_EVENTS["Keyboard Events<br>events.c<br>• Key press/release<br>• Input state updates"]
-    MLX_LOOP --> RENDER_FRAME["Frame Render<br>renderer.c::render_next_frame<br>• Scene composition<br>• Buffer management"]
-    
-    %% Input Processing Flow
-    KEY_EVENTS --> UPDATE_PLAYER["Player Update<br>player_movement.c<br>• Input processing<br>• Position calculation<br>• Collision detection"]
-    
-    %% Rendering Pipeline - Interconnected
-    RENDER_FRAME --> RAYCAST_ALL["Cast All Rays<br>raycast.c::cast_all_rays<br>• Screen column iteration"]
-    UPDATE_PLAYER --> RAYCAST_ALL
-    
-    RAYCAST_ALL --> RAY_INIT["Ray Initialization<br>ray_utils.c<br>• Direction calculation<br>• Screen coordinate mapping"]
-    RAY_INIT --> DDA_CALC["DDA Setup<br>raycast.c<br>• Step direction<br>• Side distances<br>• Grid preparation"]
-    DDA_CALC --> DDA_PERFORM["DDA Algorithm<br>raycast.c::perform_dda<br>• Grid traversal<br>• Wall detection"]
-    
-    %% Distance and Texture Calculations
-    DDA_PERFORM --> WALL_DIST["Distance Calculation<br>• Perpendicular distance<br>• Fisheye correction"]
-    WALL_DIST --> TEX_COORDS["Texture Coordinates<br>texture_utils.c<br>• Wall intersection point<br>• Texture X coordinate"]
-    
-    %% Drawing Operations
-    TEX_COORDS --> DRAW_LINE["Draw Vertical Line<br>draw_utils.c<br>• Wall height calculation<br>• Texture sampling<br>• Pixel drawing"]
-    DRAW_LINE --> SCREEN_UPDATE["Screen Buffer Update<br>renderer.c<br>• Pixel manipulation<br>• Buffer composition"]
-    
-    %% Display and Timing
-    SCREEN_UPDATE --> DISPLAY["Display Frame<br>mlx_put_image_to_window<br>• Buffer presentation"]
-    DISPLAY --> FPS_LIMIT["Frame Rate Control<br>• 60 FPS targeting<br>• Sleep timing"]
-    
-    %% Adaptive Loop Connections
-    FPS_LIMIT --> RENDER_FRAME
-    UPDATE_PLAYER --> RENDER_FRAME
-    
-    %% Exit Handling
-    KEY_EVENTS --> WINDOW_EVENTS["Window Events<br>• Close button<br>• ESC key handling"]
-    WINDOW_EVENTS --> EXIT_CHECK{"Exit Signal?"}
-    EXIT_CHECK -- Yes --> CLEANUP["Game Cleanup<br>cleanup.c<br>• Texture cleanup<br>• Window cleanup<br>• Memory deallocation"]
-    EXIT_CHECK -- No --> MLX_LOOP
-    
-    CLEANUP --> END(["Program End"])
-    
-    %% Utility System Connections - Adaptive Support
-    subgraph UTILS["Utility Systems - Used Throughout"]
+    %% === STYLING DEFINITIONS ===
+    classDef entrypoint fill:#D6EAF8,stroke:#2874A6,stroke-width:2px
+    classDef process fill:#E8DAEF,stroke:#6C3483,stroke-width:1px
+    classDef loop fill:#D5F5E3,stroke:#1D8348,stroke-width:2px
+    classDef render_pipe fill:#D4E6F1,stroke:#1A5276,stroke-width:1px
+    classDef io fill:#FCF3CF,stroke:#B7950B,stroke-width:1px
+    classDef decision fill:#FADBD8,stroke:#943126,stroke-width:1px
+    classDef utils fill:#F2F3F4,stroke:#566573,stroke-width:1px,stroke-dasharray: 4 4
+
+    %% === UTILITY SYSTEMS (Used by all phases) ===
+    subgraph UTILS [Utility Systems]
         direction TB
-        MEM_MGR["Memory Management<br>cleanup.c<br>• Resource tracking<br>• Safe deallocation"]
-        ERROR_SYS["Error Handling<br>error_loggers.c<br>• Error reporting<br>• Graceful failures"]
-        DATA_UTILS["Data Structures<br>lines.c + string.c<br>• Dynamic arrays<br>• String operations"]
-        MATH_UTILS["Math Utilities<br>direction_utils.c<br>• Vector operations<br>• Trigonometry"]
+        ERROR_SYS["Error Handling<br><i>error_loggers.c</i>"]
+        DATA_UTILS["Data Structures<br><i>lines.c, string.c</i>"]
+        MATH_UTILS["Math Utilities<br><i>direction_utils.c</i>"]
     end
-    
-    %% Utility Connections - Non-hierarchical
-    CONFIG_PARSE -.-> UTILS
-    VALIDATION -.-> UTILS
-    GAME_INIT -.-> UTILS
-    RENDER_FRAME -.-> UTILS
-    UPDATE_PLAYER -.-> UTILS
-    RAYCAST_ALL -.-> UTILS
-    TEX_INIT -.-> UTILS
-    
-    %% Resource Dependencies - Adaptive Connections
-    TEX_COORDS -.-> TEX_INIT
-    DRAW_LINE -.-> TEX_INIT
-    UPDATE_PLAYER -.-> VALIDATION
-    DDA_PERFORM -.-> VALIDATION
+    class UTILS,ERROR_SYS,DATA_UTILS,MATH_UTILS utils
+
+    %% === MAIN PROGRAM LIFECYCLE ===
+    subgraph ProgramLifecycle ["Program Lifecycle"]
+        direction LR
+        START(["./cub3D map.cub"]) --> MAIN["main.c<br>• Entry point & argument validation<br>• Initializes master <b>t_game</b> struct"]
+        class START,MAIN entrypoint
+
+        MAIN --> PHASE1_SETUP
+        subgraph PHASE1_SETUP [PHASE 1: Configuration & Validation]
+            direction TB
+            READ_FILE["Read .cub file into lines<br><i>read_file.c</i>"]
+            PARSE["<b>Parse</b> config into memory<br><i>parser_*.c, tokenizer.c</i>"]
+            VALIDATE["<b>Validate</b> Map Integrity<br><i>map_validation.c (Flood-fill)</i>"]
+            READ_FILE --> PARSE --> VALIDATE
+        end
+        class PHASE1_SETUP,READ_FILE,PARSE,VALIDATE process
+
+        VALIDATE --> PHASE2_INIT
+        subgraph PHASE2_INIT [PHASE 2: Game World Initialization]
+            direction TB
+            WINDOW_INIT["Setup Window & Buffer<br><i>window.c</i>"]
+            TEXTURE_INIT["<b>Load Textures</b> from Paths<br><i>texture_loader.c</i>"]
+            PLAYER_INIT["Initialize Player State<br><i>player.c</i>"]
+        end
+        class PHASE2_INIT,WINDOW_INIT,TEXTURE_INIT,PLAYER_INIT process
+
+        PHASE2_INIT --> PHASE3_LOOP
+        subgraph PHASE3_LOOP [PHASE 3: Interactive Game Loop]
+            direction LR
+            SETUP_HOOKS["Setup Event Hooks<br><i>events.c</i><br>Connects handlers to MLX engine"]
+            SETUP_HOOKS --> MLX_LOOP["MLX Engine Starts<br><i>mlx_loop()</i><br>Listens for events, schedules frames"]
+
+            subgraph "Input Handling (Event-Driven)"
+                direction TB
+                MLX_LOOP -- "User Input Event" --> INPUT_HANDLER["Input Handlers<br><i>events.c</i><br><b>Task:</b> Only sets boolean flags in <b>t_input</b>"]
+                INPUT_HANDLER --> EXIT_CHECK{"Exit Signal?"}
+            end
+            
+            subgraph "Frame Rendering (Continuous Heartbeat)"
+                direction TB
+                MLX_LOOP -- "Render Heartbeat" --> RENDER_FRAME["(1) Update Player State<br><i>player_movement.c</i><br>Reads <b>t_input</b> flags to calculate new position"]
+                RENDER_FRAME --> RAYCAST["(2) Render 3D Scene (DDA)<br><i>raycast.c, draw_utils.c</i>"]
+                RAYCAST --> RENDER_MINIMAP["(3) Render Minimap<br><i>renderer_utils.c</i>"]
+                RENDER_MINIMAP --> DISPLAY["(4) Display Frame<br><i>mlx_put_image_to_window()</i>"]
+                DISPLAY --> FPS_LIMIT["(5) Limit Framerate<br><i>renderer.c</i>"]
+            end
+        end
+        class PHASE3_LOOP,SETUP_HOOKS,MLX_LOOP loop
+        class INPUT_HANDLER,EXIT_CHECK io
+        class RENDER_FRAME,RAYCAST,RENDER_MINIMAP,DISPLAY,FPS_LIMIT render_pipe
+
+        EXIT_CHECK -- "Yes" --> CLEANUP["<b>Cleanup All Resources</b><br><i>cleanup.c</i><br>Frees all memory, destroys images & window"]
+        CLEANUP --> END([Program End])
+        class CLEANUP,END decision
+    end
+
+    %% === CROSS-CUTTING DEPENDENCIES ===
+    ProgramLifecycle -.-> UTILS
 ```
 
 ## Installation
