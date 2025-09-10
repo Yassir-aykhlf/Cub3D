@@ -78,13 +78,12 @@ flowchart LR
                 INPUT_HANDLER --> EXIT_CHECK{"Exit Signal?"}
             end
             
-            subgraph "Frame Rendering (Continuous Heartbeat)"
+            subgraph "Frame Rendering (Scheduled per Frame)"
                 direction TB
-                MLX_LOOP -- "Render Heartbeat" --> RENDER_FRAME["(1) Update Player State<br><i>player_movement.c</i><br>Reads <b>t_input</b> flags to calculate new position"]
+                MLX_LOOP -- "Scheduled Frame Render" --> RENDER_FRAME["(1) Update Player State<br><i>player_movement.c</i><br>Reads <b>t_input</b> flags to calculate new position"]
                 RENDER_FRAME --> RAYCAST["(2) Render 3D Scene (DDA)<br><i>raycast.c, draw_utils.c</i>"]
-                RAYCAST --> RENDER_MINIMAP["(3) Render Minimap<br><i>renderer_utils.c</i>"]
-                RENDER_MINIMAP --> DISPLAY["(4) Display Frame<br><i>mlx_put_image_to_window()</i>"]
-                DISPLAY --> FPS_LIMIT["(5) Limit Framerate<br><i>renderer.c</i>"]
+                RAYCAST --> DISPLAY["(3) Display Frame<br><i>mlx_put_image_to_window()</i>"]
+                DISPLAY --> FPS_LIMIT["(4) Limit Framerate<br><i>renderer.c</i>"]
             end
         end
 
