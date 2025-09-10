@@ -34,17 +34,8 @@ Cub3D is a 3D graphics engine built from scratch using the MiniLibX graphics lib
 ## System Architecture
 
 ```mermaid
-%% --- Cub3D Architectural Flowchart --- %%
+%% --- Cub3D Architectural Flowchart (Unstyled for Max Compatibility) --- %%
 flowchart LR
-    %% === STYLING DEFINITIONS ===
-    classDef entrypoint fill:#D6EAF8,stroke:#2874A6,stroke-width:2px
-    classDef process fill:#E8DAEF,stroke:#6C3483,stroke-width:1px
-    classDef loop fill:#D5F5E3,stroke:#1D8348,stroke-width:2px
-    classDef render_pipe fill:#D4E6F1,stroke:#1A5276,stroke-width:1px
-    classDef io fill:#FCF3CF,stroke:#B7950B,stroke-width:1px
-    classDef decision fill:#FADBD8,stroke:#943126,stroke-width:1px
-    classDef utils fill:#F2F3F4,stroke:#566573,stroke-width:1px,stroke-dasharray: 4 4
-
     %% === UTILITY SYSTEMS (Used by all phases) ===
     subgraph UTILS [Utility Systems]
         direction TB
@@ -52,13 +43,11 @@ flowchart LR
         DATA_UTILS["Data Structures<br><i>lines.c, string.c</i>"]
         MATH_UTILS["Math Utilities<br><i>direction_utils.c</i>"]
     end
-    class UTILS,ERROR_SYS,DATA_UTILS,MATH_UTILS utils
 
     %% === MAIN PROGRAM LIFECYCLE ===
     subgraph ProgramLifecycle ["Program Lifecycle"]
         direction LR
         START(["./cub3D map.cub"]) --> MAIN["main.c<br>• Entry point & argument validation<br>• Initializes master <b>t_game</b> struct"]
-        class START,MAIN entrypoint
 
         MAIN --> PHASE1_SETUP
         subgraph PHASE1_SETUP [PHASE 1: Configuration & Validation]
@@ -68,7 +57,6 @@ flowchart LR
             VALIDATE["<b>Validate</b> Map Integrity<br><i>map_validation.c (Flood-fill)</i>"]
             READ_FILE --> PARSE --> VALIDATE
         end
-        class PHASE1_SETUP,READ_FILE,PARSE,VALIDATE process
 
         VALIDATE --> PHASE2_INIT
         subgraph PHASE2_INIT [PHASE 2: Game World Initialization]
@@ -77,7 +65,6 @@ flowchart LR
             TEXTURE_INIT["<b>Load Textures</b> from Paths<br><i>texture_loader.c</i>"]
             PLAYER_INIT["Initialize Player State<br><i>player.c</i>"]
         end
-        class PHASE2_INIT,WINDOW_INIT,TEXTURE_INIT,PLAYER_INIT process
 
         PHASE2_INIT --> PHASE3_LOOP
         subgraph PHASE3_LOOP [PHASE 3: Interactive Game Loop]
@@ -100,13 +87,9 @@ flowchart LR
                 DISPLAY --> FPS_LIMIT["(5) Limit Framerate<br><i>renderer.c</i>"]
             end
         end
-        class PHASE3_LOOP,SETUP_HOOKS,MLX_LOOP loop
-        class INPUT_HANDLER,EXIT_CHECK io
-        class RENDER_FRAME,RAYCAST,RENDER_MINIMAP,DISPLAY,FPS_LIMIT render_pipe
 
         EXIT_CHECK -- "Yes" --> CLEANUP["<b>Cleanup All Resources</b><br><i>cleanup.c</i><br>Frees all memory, destroys images & window"]
         CLEANUP --> END([Program End])
-        class CLEANUP,END decision
     end
 
     %% === CROSS-CUTTING DEPENDENCIES ===
