@@ -39,96 +39,98 @@ config:
   layout: elk
 ---
 flowchart LR
-    subgraph INIT["Initialization Phase"]
-        START(["./cub3D map.cub"]) --> MAIN["main.c<br>• Argument validation<br>• Game structure setup"]
-        MAIN --> CONFIG_PARSE["Configuration Parser<br>parse_game_config.c"]
-    end
-
-    subgraph PARSING["Parsing Phase (Memory Only)"]
-        CONFIG_PARSE --> LEXER["Lexer System<br>lexer.c + tokenizer.c<br>• File reading<br>• Token classification<br>• Syntax validation"]
-        LEXER --> TEX_PARSER["TEX_PARSER<br>parse_*.c<br>• Read texture paths<br>• Store in memory<br>• NO file validation"]
-        LEXER --> MAP_PARSER["MAP_PARSER<br>parse_map.c<br>• Read map grid<br>• Store in memory<br>• NO boundary checks"]
-    end
-
-    subgraph VALIDATION["Validation Phase"]
-        TEX_PARSER --> VALIDATION["VALIDATION<br>map_validation.c<br>• Flood Fill algorithm<br>• Boundary validation<br>• Map integrity checks"]
-        MAP_PARSER --> VALIDATION
-    end
-
-    subgraph RESOURCE_LOADING["Resource Loading Phase"]
-        VALIDATION --> TEX_INIT["TEX_INIT<br>texture_loader.c<br>• Load XPM files<br>• XPM to image conversion<br>• Texture data allocation"]
-        VALIDATION --> GAME_INIT["Game Initialization<br>game.c::init_game"]
-    end
-
-    subgraph GRAPHICS_INIT["Graphics Initialization"]
-        GAME_INIT --> WINDOW_INIT["Window Setup<br>window.c<br>• MLX initialization<br>• Screen buffer creation"]
-        TEX_INIT --> SETUP_HOOKS["Event Setup<br>• Key handlers<br>• Window events<br>• Loop hooks"]
-        WINDOW_INIT --> SETUP_HOOKS
-    end
-
-    subgraph RUNTIME["Runtime Loop"]
-        SETUP_HOOKS --> MLX_LOOP["MLX Main Loop<br>mlx_loop"]
-        
-        MLX_LOOP --> EVENTS["Event Processing"]
-        EVENTS --> KEY_EVENTS["Keyboard Events<br>events.c<br>• Key press/release<br>• Input state updates"]
-        EVENTS --> WINDOW_EVENTS["Window Events<br>• Close button<br>• ESC key handling"]
-        
-        MLX_LOOP --> RENDER_FRAME["Frame Render<br>renderer.c::render_next_frame"]
-        
-        RENDER_FRAME --> UPDATE_PLAYER["Player Update<br>player_movement.c<br>• Input processing<br>• Position calculation<br>• Collision detection"]
-        
-        UPDATE_PLAYER --> RAYCAST_PIPELINE["Raycasting Pipeline"]
-    end
-
-    subgraph RAYCAST_PIPELINE["Raycasting Pipeline"]
-        RAYCAST_ALL["Cast All Rays<br>raycast.c::cast_all_rays"] --> RAY_INIT["Ray Initialization<br>ray_utils.c<br>• Direction calculation<br>• Screen coordinate mapping"]
-        RAY_INIT --> DDA_CALC["DDA Calculation<br>raycast.c<br>• Step direction<br>• Side distances"]
-        DDA_CALC --> DDA_PERFORM["DDA Algorithm<br>raycast.c::perform_dda<br>• Grid traversal<br>• Wall detection"]
-        DDA_PERFORM --> WALL_DIST["Distance Calculation<br>• Perpendicular distance<br>• Fisheye correction"]
-        WALL_DIST --> TEX_COORDS["Texture Coordinates<br>texture_utils.c<br>• Wall intersection point<br>• Texture X coordinate"]
-        TEX_COORDS --> DRAW_LINE["Draw Vertical Line<br>draw_utils.c<br>• Wall height calculation<br>• Texture sampling<br>• Pixel drawing"]
-    end
-
-    subgraph DISPLAY["Display Pipeline"]
-        DRAW_LINE --> SCREEN_UPDATE["Screen Buffer Update<br>renderer.c<br>• Pixel manipulation<br>• Buffer composition"]
-        SCREEN_UPDATE --> DISPLAY_FRAME["Display Frame<br>mlx_put_image_to_window"]
-        DISPLAY_FRAME --> FPS_LIMIT["Frame Rate Control<br>• 60 FPS targeting<br>• Sleep timing"]
-    end
-
-    subgraph UTILS["Utility Systems"]
+    %% Entry Point
+    START(["./cub3D map.cub"]) --> MAIN["main.c<br>• Argument validation<br>• Game structure setup"]
+    
+    %% Configuration Phase - Only Memory Operations
+    MAIN --> CONFIG_PARSE["Configuration Parser<br>parse_game_config.c<br>• Orchestrates parsing"]
+    
+    CONFIG_PARSE --> LEXER["Lexer System<br>lexer.c + tokenizer.c<br>• File reading<br>• Token classification<br>• Syntax validation"]
+    CONFIG_PARSE --> TEX_PARSER["Texture Config Parser<br>parse_*.c<br>• Read texture paths to memory<br>• Parse RGB values<br>• Store configuration only"]
+    CONFIG_PARSE --> MAP_PARSER["Map Config Parser<br>parse_map.c<br>• Read map grid to memory<br>• Basic syntax validation<br>• Store grid configuration"]
+    
+    %% Validation Phase - Separate Step
+    LEXER --> VALIDATION["Map Validation<br>map_validation.c<br>• Flood fill boundary check<br>• Player position validation<br>• Map integrity verification"]
+    TEX_PARSER --> VALIDATION
+    MAP_PARSER --> VALIDATION
+    
+    %% Initialization Phase - Actual Resource Loading
+    VALIDATION --> GAME_INIT["Game Initialization<br>game.c::init_game<br>• Game state setup<br>• System preparation"]
+    
+    GAME_INIT --> WINDOW_INIT["Window Setup<br>window.c<br>• MLX initialization<br>• Screen buffer creation"]
+    GAME_INIT --> TEX_INIT["Texture Loading<br>texture_loader.c<br>• XPM file reading<br>• Image data conversion<br>• Texture buffer creation"]
+    GAME_INIT --> PLAYER_INIT["Player Initialization<br>player.c<br>• Position setup<br>• Direction vectors"]
+    
+    %% Setup Connections
+    WINDOW_INIT --> SETUP_HOOKS["Event Hook Setup<br>events.c<br>• Key handlers<br>• Window events"]
+    TEX_INIT --> SETUP_HOOKS
+    PLAYER_INIT --> SETUP_HOOKS
+    
+    %% Main Game Loop - Adaptive Connections
+    SETUP_HOOKS --> MLX_LOOP["MLX Main Loop<br>mlx_loop<br>• Event processing<br>• Frame scheduling"]
+    
+    %% Parallel Event Processing
+    MLX_LOOP --> KEY_EVENTS["Keyboard Events<br>events.c<br>• Key press/release<br>• Input state updates"]
+    MLX_LOOP --> RENDER_FRAME["Frame Render<br>renderer.c::render_next_frame<br>• Scene composition<br>• Buffer management"]
+    
+    %% Input Processing Flow
+    KEY_EVENTS --> UPDATE_PLAYER["Player Update<br>player_movement.c<br>• Input processing<br>• Position calculation<br>• Collision detection"]
+    
+    %% Rendering Pipeline - Interconnected
+    RENDER_FRAME --> RAYCAST_ALL["Cast All Rays<br>raycast.c::cast_all_rays<br>• Screen column iteration"]
+    UPDATE_PLAYER --> RAYCAST_ALL
+    
+    RAYCAST_ALL --> RAY_INIT["Ray Initialization<br>ray_utils.c<br>• Direction calculation<br>• Screen coordinate mapping"]
+    RAY_INIT --> DDA_CALC["DDA Setup<br>raycast.c<br>• Step direction<br>• Side distances<br>• Grid preparation"]
+    DDA_CALC --> DDA_PERFORM["DDA Algorithm<br>raycast.c::perform_dda<br>• Grid traversal<br>• Wall detection"]
+    
+    %% Distance and Texture Calculations
+    DDA_PERFORM --> WALL_DIST["Distance Calculation<br>• Perpendicular distance<br>• Fisheye correction"]
+    WALL_DIST --> TEX_COORDS["Texture Coordinates<br>texture_utils.c<br>• Wall intersection point<br>• Texture X coordinate"]
+    
+    %% Drawing Operations
+    TEX_COORDS --> DRAW_LINE["Draw Vertical Line<br>draw_utils.c<br>• Wall height calculation<br>• Texture sampling<br>• Pixel drawing"]
+    DRAW_LINE --> SCREEN_UPDATE["Screen Buffer Update<br>renderer.c<br>• Pixel manipulation<br>• Buffer composition"]
+    
+    %% Display and Timing
+    SCREEN_UPDATE --> DISPLAY["Display Frame<br>mlx_put_image_to_window<br>• Buffer presentation"]
+    DISPLAY --> FPS_LIMIT["Frame Rate Control<br>• 60 FPS targeting<br>• Sleep timing"]
+    
+    %% Adaptive Loop Connections
+    FPS_LIMIT --> RENDER_FRAME
+    UPDATE_PLAYER --> RENDER_FRAME
+    
+    %% Exit Handling
+    KEY_EVENTS --> WINDOW_EVENTS["Window Events<br>• Close button<br>• ESC key handling"]
+    WINDOW_EVENTS --> EXIT_CHECK{"Exit Signal?"}
+    EXIT_CHECK -- Yes --> CLEANUP["Game Cleanup<br>cleanup.c<br>• Texture cleanup<br>• Window cleanup<br>• Memory deallocation"]
+    EXIT_CHECK -- No --> MLX_LOOP
+    
+    CLEANUP --> END(["Program End"])
+    
+    %% Utility System Connections - Adaptive Support
+    subgraph UTILS["Utility Systems - Used Throughout"]
+        direction TB
         MEM_MGR["Memory Management<br>cleanup.c<br>• Resource tracking<br>• Safe deallocation"]
         ERROR_SYS["Error Handling<br>error_loggers.c<br>• Error reporting<br>• Graceful failures"]
         DATA_UTILS["Data Structures<br>lines.c + string.c<br>• Dynamic arrays<br>• String operations"]
         MATH_UTILS["Math Utilities<br>direction_utils.c<br>• Vector operations<br>• Trigonometry"]
     end
-
-    %% Flow control
-    RAYCAST_PIPELINE --> DISPLAY
-    FPS_LIMIT --> RENDER_FRAME
-    WINDOW_EVENTS --> EXIT_CHECK{"Exit Signal?"}
-    EXIT_CHECK -- Yes --> CLEANUP["Game Cleanup<br>cleanup.c<br>• Texture cleanup<br>• Window cleanup<br>• Memory deallocation"]
-    EXIT_CHECK -- No --> RENDER_FRAME
-    CLEANUP --> END(["Program End"])
-
-    %% Utility connections (dotted lines for cleaner look)
-    PARSING -.-> UTILS
+    
+    %% Utility Connections - Non-hierarchical
+    CONFIG_PARSE -.-> UTILS
     VALIDATION -.-> UTILS
-    RESOURCE_LOADING -.-> UTILS
-    RUNTIME -.-> UTILS
-    RAYCAST_PIPELINE -.-> UTILS
-
-    %% Styling for better visual organization
-    classDef parsePhase fill:#e1f5fe
-    classDef validatePhase fill:#f3e5f5
-    classDef loadPhase fill:#e8f5e8
-    classDef runtimePhase fill:#fff3e0
-    classDef utilPhase fill:#f5f5f5
-
-    class TEX_PARSER,MAP_PARSER,LEXER parsePhase
-    class VALIDATION validatePhase
-    class TEX_INIT,GAME_INIT loadPhase
-    class RENDER_FRAME,UPDATE_PLAYER,RAYCAST_ALL runtimePhase
-    class MEM_MGR,ERROR_SYS,DATA_UTILS,MATH_UTILS utilPhase
+    GAME_INIT -.-> UTILS
+    RENDER_FRAME -.-> UTILS
+    UPDATE_PLAYER -.-> UTILS
+    RAYCAST_ALL -.-> UTILS
+    TEX_INIT -.-> UTILS
+    
+    %% Resource Dependencies - Adaptive Connections
+    TEX_COORDS -.-> TEX_INIT
+    DRAW_LINE -.-> TEX_INIT
+    UPDATE_PLAYER -.-> VALIDATION
+    DDA_PERFORM -.-> VALIDATION
 ```
 
 ## Installation
