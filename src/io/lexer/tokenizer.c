@@ -52,6 +52,17 @@ int	lexer_expect_token(t_lexer_state *lexer,
 	return (0);
 }
 
+int	isdigits(t_lexer_state *lexer)
+{
+	size_t	index;
+
+	index = lexer->cursor;
+	while (isdigit(lexer_char_at(lexer, index)))
+		index++;
+	return ((lexer_char_at(lexer, index) == 0)
+		|| lexer_char_at(lexer, index) == COMA);
+}
+
 void	get_next_token(t_lexer_state *lexer, t_token *token)
 {
 	lexer->current = token;
@@ -74,23 +85,8 @@ void	get_next_token(t_lexer_state *lexer, t_token *token)
 		lexer->cursor++;
 		return ;
 	}
-	if (isdigit(lexer_current_char(lexer)))
+	if (isdigits(lexer))
 		lexer_read_number(lexer);
 	else
 		lexer_read_word(lexer);
-}
-
-char	*get_token_type(t_token *token)
-{
-	char	*types[COUNT];
-
-	types[MAP_LINE] = "MAP_LINE";
-	types[EOL] = "EOL";
-	types[EOF_] = "EOF_";
-	types[SEPARATOR] = "SEPARATOR";
-	types[WORD] = "WORD";
-	types[NUMBER] = "NUMBER";
-	if (token->type < COUNT)
-		return (types[token->type]);
-	return ("UNKNOWN TYPE");
 }
