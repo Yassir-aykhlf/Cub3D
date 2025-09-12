@@ -1,9 +1,9 @@
 NO assets/textures/north_wall.xpm
 SO assets/textures/south_wall.xpm
 WE assets/textures/west_wall.xpm
-EA assets/textures/east_wall
+EA assets/textures/east_wall.xpm
 
-F 220,100,0
+F 220,100,255
 C 225,30,0
 
 1111111111111111111111111

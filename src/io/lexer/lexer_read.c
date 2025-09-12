@@ -45,6 +45,12 @@ void	lexer_read_number(t_lexer_state *lexer)
 	{
 		num = (num * 10) + (lexer_current_char(lexer) - '0');
 		lexer->cursor++;
+		if (num > 255)
+		{
+			lexer->current->u_data.number_data = num;
+			lexer->current->type = OVERFLOW_NUMBER;
+			return ;
+		}
 	}
 	lexer->current->u_data.number_data = num;
 	lexer->current->type = NUMBER;

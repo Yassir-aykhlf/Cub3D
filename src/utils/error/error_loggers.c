@@ -12,7 +12,7 @@
 
 #include "cube.h"
 
-static void	print_error_header(void)
+void	print_error_header(void)
 {
 	printf("Error\n");
 }

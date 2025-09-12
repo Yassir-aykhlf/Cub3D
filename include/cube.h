@@ -89,6 +89,7 @@ typedef enum e_token_type
 	SEPARATOR,
 	WORD,
 	NUMBER,
+	OVERFLOW_NUMBER,
 	COUNT
 }	t_token_type;
 
@@ -352,6 +353,7 @@ int				throw_error_on_failure(const char *element,
 					t_lexer_state *lexer,
 					int (*proc)(t_game *, t_lexer_state *));
 int				log_duplication_error(const char *duplication_label);
+void			print_error_header(void);
 /* Lines Methods */
 void			destroy_lines(t_lines *const lines);
 void			push_line(t_lines *const lines, char *line);
