@@ -15,7 +15,7 @@
 
 # include <mlx.h>
 # include "get_next_line.h"
-
+# include <errno.h>
 # include <string.h>
 # include <ctype.h>
 # include <stdio.h>

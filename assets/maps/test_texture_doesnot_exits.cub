@@ -1,7 +1,7 @@
-NO assets/textures/north_wall.xpm
+NO does_not_exist
 SO assets/textures/south_wall.xpm
 WE assets/textures/west_wall.xpm
-EA assets/textures/east_wall
+EA assets/textures/east_wall.xpm
 
 F 220,100,0
 C 225,30,0

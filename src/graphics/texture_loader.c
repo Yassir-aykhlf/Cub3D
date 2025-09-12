@@ -18,6 +18,8 @@ static int	load_texture_image(t_game *game, int tex_type, char *path)
 			game->window.mlx_ptr, path,
 			&game->textures[tex_type].width,
 			&game->textures[tex_type].height);
+	if (game->textures[tex_type].img_ptr == NULL)
+		printf("./cube3d: %s: %s\n", path, strerror(errno));
 	return (game->textures[tex_type].img_ptr != NULL);
 }
 

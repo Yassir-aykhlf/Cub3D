@@ -27,7 +27,10 @@ int	main(int ac, char **av)
 	game.map.ceiling_color = -1;
 	game.map.floor_color = -1;
 	if (!init_game(&game))
+	{
+		cleanup_game(&game);
 		return (1);
+	}
 	if (!run_game(&game))
 	{
 		cleanup_game(&game);
