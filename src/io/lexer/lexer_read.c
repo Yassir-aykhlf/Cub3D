@@ -6,7 +6,7 @@
 /*   By: yaykhlf <yaykhlf@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/09 10:14:56 by yaykhlf           #+#    #+#             */
-/*   Updated: 2025/09/09 10:36:52 by yaykhlf          ###   ########.fr       */
+/*   Updated: 2025/09/18 11:00:41 by lazmoud          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 static int	is_not_null(int c)
 {
-	return (c && !isspace(c));
+	return (c && !ft_isspace(c));
 }
 
 void	lexer_read_word(t_lexer_state *lexer)
@@ -41,7 +41,7 @@ void	lexer_read_number(t_lexer_state *lexer)
 
 	num = 0;
 	while (lexer_current_char(lexer)
-		&& isdigit(lexer_current_char(lexer)))
+		&& ft_isdigit(lexer_current_char(lexer)))
 	{
 		num = (num * 10) + (lexer_current_char(lexer) - '0');
 		lexer->cursor++;

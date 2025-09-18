@@ -13,7 +13,7 @@ GRAPHICS_SRCS = ./src/graphics/render/renderer.c ./src/graphics/render/render_he
 				./src/graphics/texture_loader.c ./src/graphics/window/window.c
 
 # Input/Output subsystem
-IO_SRCS = ./src/io/parsing/read_file.c ./src/io/parsing/parse_game_config.c ./src/io/parsing/parse_rgb.c \
+IO_SRCS = ./src/io/lexer/ft_ctype.c ./src/io/lexer/ft_memset.c ./src/io/parsing/read_file.c ./src/io/parsing/parse_game_config.c ./src/io/parsing/parse_rgb.c \
 		  ./src/io/parsing/parse_textures.c ./src/io/parsing/parse_texture_helpers.c ./src/io/parsing/parse_utils.c \
 		  ./src/io/parsing/parse_rgb_helpers.c ./src/io/parsing/parse_debug.c ./src/io/parsing/parse_map.c \
 		  ./src/io/lexer/tokenizer.c ./src/io/lexer/lexer_read.c ./src/io/lexer/lexer.c ./src/io/lexer/token_utils.c \

@@ -6,7 +6,7 @@
 /*   By: yaykhlf <yaykhlf@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/09 10:09:34 by yaykhlf           #+#    #+#             */
-/*   Updated: 2025/09/09 11:13:11 by yaykhlf          ###   ########.fr       */
+/*   Updated: 2025/09/18 11:01:34 by lazmoud          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,12 +22,12 @@ int	init_game(t_game *game)
 		return (0);
 	if (!init_screen_buffer(game))
 		return (0);
-	memset(game->textures, 0, sizeof(game->textures));
+	ft_memset(game->textures, 0, sizeof(game->textures));
 	if (!init_textures(game))
 		return (0);
 	if (!init_player(game))
 		return (0);
-	memset(&game->input, 0, sizeof(t_input));
+	ft_memset(&game->input, 0, sizeof(t_input));
 	game->running = 1;
 	gettimeofday(&game->last_frame_time, NULL);
 	return (1);
@@ -39,8 +39,8 @@ static int	parse_and_validate_config(t_game *game)
 	int				code;
 	t_lexer_state	lexer;
 
-	memset(&lexer, 0, sizeof(lexer));
-	memset(&lines, 0, sizeof(lines));
+	ft_memset(&lexer, 0, sizeof(lexer));
+	ft_memset(&lines, 0, sizeof(lines));
 	lexer.lines = &lines;
 	if (!read_file_into_lines(lexer.lines, game->map.config_file_path))
 	{

@@ -6,7 +6,7 @@
 /*   By: yaykhlf <yaykhlf@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/09 10:14:50 by yaykhlf           #+#    #+#             */
-/*   Updated: 2025/09/09 10:36:52 by yaykhlf          ###   ########.fr       */
+/*   Updated: 2025/09/18 11:00:07 by lazmoud          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ void	skip_whitespace(t_lexer_state *lexer)
 	if (lexer_exhausted(lexer))
 		return ;
 	while (lexer_current_char(lexer)
-		&& isspace(lexer_current_char(lexer)))
+		&& ft_isspace(lexer_current_char(lexer)))
 		lexer->cursor++;
 }
 
@@ -41,7 +41,7 @@ int	lexer_eol_reached(t_lexer_state *lexer)
 int	lexer_exhausted(t_lexer_state *lexer)
 {
 	return ((!lexer->lines->size)
-		|| (lexer->line_index > lexer->lines->size - 1));
+		|| (lexer->line_index == lexer->lines->size));
 }
 
 int	lexer_eof_reached(t_lexer_state *lexer)

@@ -6,7 +6,7 @@
 /*   By: yaykhlf <yaykhlf@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/13 09:27:24 by yaykhlf           #+#    #+#             */
-/*   Updated: 2025/09/09 10:36:52 by yaykhlf          ###   ########.fr       */
+/*   Updated: 2025/09/18 11:03:24 by lazmoud          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -287,6 +287,9 @@ void			lexer_read_number(t_lexer_state *lexer);
 t_token_type	lexer_look_ahead(t_lexer_state *lexer);
 int				lexer_expect_token(t_lexer_state *lexer,
 					t_token_type expected_type, t_token *token);
+int				ft_isdigit(int c);
+int				ft_isspace(char c);
+void			*ft_memset(void *b, int c, size_t len);
 /* Tokenizer function */
 void			get_next_token(t_lexer_state *lexer, t_token *storage);
 char			*get_token_type(t_token *token);

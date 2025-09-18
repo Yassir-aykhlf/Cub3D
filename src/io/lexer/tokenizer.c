@@ -6,7 +6,7 @@
 /*   By: yaykhlf <yaykhlf@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/09 10:14:41 by yaykhlf           #+#    #+#             */
-/*   Updated: 2025/09/09 10:36:52 by yaykhlf          ###   ########.fr       */
+/*   Updated: 2025/09/18 11:02:58 by lazmoud          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,7 +57,7 @@ int	isdigits(t_lexer_state *lexer)
 	size_t	index;
 
 	index = lexer->cursor;
-	while (isdigit(lexer_char_at(lexer, index)))
+	while (ft_isdigit(lexer_char_at(lexer, index)))
 		index++;
 	return ((lexer_char_at(lexer, index) == 0)
 		|| lexer_char_at(lexer, index) == COMA);

@@ -6,7 +6,7 @@
 /*   By: yaykhlf <yaykhlf@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/09 09:52:59 by yaykhlf           #+#    #+#             */
-/*   Updated: 2025/09/09 10:07:30 by yaykhlf          ###   ########.fr       */
+/*   Updated: 2025/09/18 11:06:02 by lazmoud          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ int	main(int ac, char **av)
 		printf("Usage: %s <Map>\n", av[0]);
 		return (1);
 	}
-	memset(&game, 0, sizeof(t_game));
+	ft_memset(&game, 0, sizeof(t_game));
 	game.map.config_file_path = av[1];
 	game.map.ceiling_color = -1;
 	game.map.floor_color = -1;
