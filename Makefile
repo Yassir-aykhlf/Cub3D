@@ -1,25 +1,20 @@
 LIB_CUBE=./libcube3d.a
 MAIN=./src/core/main.c
 
-# Core application files
 CORE_SRCS = ./src/core/game.c ./src/core/cleanup.c ./src/core/cleanup_helpers.c
 
-# Game engine files  
-ENGINE_SRCS = ./src/engine/player.c ./src/engine/player_movement.c ./src/engine/direction_utils.c
+ENGINE_SRCS = ./src/engine/player.c ./src/engine/player_movement.c ./src/engine/movement_helpers.c ./src/engine/direction_utils.c
 
-# Graphics subsystem
 GRAPHICS_SRCS = ./src/graphics/render/renderer.c ./src/graphics/render/render_helpers.c ./src/graphics/render/draw_utils.c \
 				./src/graphics/raycast/raycast.c ./src/graphics/raycast/ray_utils.c ./src/graphics/raycast/texture_utils.c \
 				./src/graphics/texture_loader.c ./src/graphics/window/window.c
 
-# Input/Output subsystem
 IO_SRCS = ./src/io/lexer/ft_ctype.c ./src/io/lexer/ft_memset.c ./src/io/parsing/read_file.c ./src/io/parsing/parse_game_config.c ./src/io/parsing/parse_rgb.c \
 		  ./src/io/parsing/parse_textures.c ./src/io/parsing/parse_texture_helpers.c ./src/io/parsing/parse_utils.c \
 		  ./src/io/parsing/parse_rgb_helpers.c ./src/io/parsing/parse_debug.c ./src/io/parsing/parse_map.c \
 		  ./src/io/lexer/tokenizer.c ./src/io/lexer/lexer_read.c ./src/io/lexer/lexer.c ./src/io/lexer/token_utils.c \
-		  ./src/io/events/events.c
+		  ./src/io/events/events.c ./src/io/events/event_helpers.c
 
-# Utility functions and data structures
 UTILS_SRCS = ./src/utils/containers/lines.c ./src/utils/containers/string.c ./src/utils/gnl/get_next_line.c \
 			 ./src/utils/gnl/get_next_line_utils.c ./src/utils/error/error_loggers.c \
 			 ./src/utils/map/map_validation.c ./src/utils/map/map_validation_helpers.c \
@@ -50,7 +45,7 @@ fclean: clean
 	$(RM) $(NAME)
 re: fclean all
 
-run: $(NAME)
+run: $(NAME) norm valgrind
 	./$(NAME) ./assets/maps/test_basic.cub
 
 test: $(NAME)

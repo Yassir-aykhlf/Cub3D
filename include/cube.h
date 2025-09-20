@@ -5,8 +5,8 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: yaykhlf <yaykhlf@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/08/13 09:27:24 by yaykhlf           #+#    #+#             */
-/*   Updated: 2025/09/18 11:03:24 by lazmoud          ###   ########.fr       */
+/*   Created: 2025/09/20 17:39:23 by yaykhlf           #+#    #+#             */
+/*   Updated: 2025/09/20 17:39:24 by yaykhlf          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,8 +25,8 @@
 # include <sys/time.h>
 # include <math.h>
 
-# define WINDOW_WIDTH 480
-# define WINDOW_HEIGHT 480
+# define WINDOW_WIDTH 1920
+# define WINDOW_HEIGHT 1080
 # define TARGET_FPS 60
 # define MSEC_PER_FRAME 16666
 # define MSEC 1000000
@@ -38,11 +38,20 @@
 # define S_KEY 115
 # define A_KEY 97
 # define D_KEY 100
+# define Q_KEY 113
+# define Z_KEY 122
 # define LEFT_ARROW 65361
 # define RIGHT_ARROW 65363
 
 # define MOVE_SPEED 0.05
 # define ROT_SPEED 0.03
+
+// Direction constants for last key tracking
+# define DIR_NONE 0
+# define DIR_LEFT 1
+# define DIR_RIGHT 2
+# define DIR_FORWARD 3
+# define DIR_BACKWARD 4
 
 # define KEY_PRESS 2
 # define KEY_RELEASE 3
@@ -179,6 +188,9 @@ typedef struct s_input
 	int	move_right;
 	int	rot_left;
 	int	rot_right;
+	int	last_horizontal_move;
+	int	last_rotation;
+	int	last_vertical_move;
 }	t_input;
 
 typedef struct s_ray
@@ -243,9 +255,17 @@ int				handle_keypress(int keycode, t_game *game);
 int				handle_keyrelease(int keycode, t_game *game);
 int				handle_close(t_game *game);
 void			setup_event_hooks(t_game *game);
+void			handle_movement_keypress(int keycode, t_game *game);
+void			handle_rotation_keypress(int keycode, t_game *game);
+void			handle_movement_keyrelease(int keycode, t_game *game);
+void			handle_rotation_keyrelease(int keycode, t_game *game);
 
 /* Player movement functions */
 void			update_player_state(t_game *game);
+void			handle_rotation(t_game *game);
+void			handle_strafe_movement(t_game *game);
+void			apply_rotation(t_player *player, double rot_speed);
+void			apply_movement(t_game *game, double move_x, double move_y);
 
 /* Rendering functions */
 int				render_next_frame(t_game *game);

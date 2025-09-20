@@ -6,7 +6,7 @@
 /*   By: yaykhlf <yaykhlf@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/13 09:38:03 by yaykhlf           #+#    #+#             */
-/*   Updated: 2025/09/05 11:34:13 by yaykhlf          ###   ########.fr       */
+/*   Updated: 2025/09/20 17:40:53 by yaykhlf          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,35 +21,15 @@ int	handle_keypress(int keycode, t_game *game)
 		cleanup_game(game);
 		exit(CUBE_SUCCESS);
 	}
-	else if (keycode == W_KEY)
-		game->input.move_fwd = 1;
-	else if (keycode == S_KEY)
-		game->input.move_back = 1;
-	else if (keycode == A_KEY)
-		game->input.move_left = 1;
-	else if (keycode == D_KEY)
-		game->input.move_right = 1;
-	else if (keycode == LEFT_ARROW)
-		game->input.rot_left = 1;
-	else if (keycode == RIGHT_ARROW)
-		game->input.rot_right = 1;
+	handle_movement_keypress(keycode, game);
+	handle_rotation_keypress(keycode, game);
 	return (0);
 }
 
 int	handle_keyrelease(int keycode, t_game *game)
 {
-	if (keycode == W_KEY)
-		game->input.move_fwd = 0;
-	else if (keycode == S_KEY)
-		game->input.move_back = 0;
-	else if (keycode == A_KEY)
-		game->input.move_left = 0;
-	else if (keycode == D_KEY)
-		game->input.move_right = 0;
-	else if (keycode == LEFT_ARROW)
-		game->input.rot_left = 0;
-	else if (keycode == RIGHT_ARROW)
-		game->input.rot_right = 0;
+	handle_movement_keyrelease(keycode, game);
+	handle_rotation_keyrelease(keycode, game);
 	return (0);
 }
 

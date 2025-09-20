@@ -6,13 +6,13 @@
 /*   By: yaykhlf <yaykhlf@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/05 11:35:20 by yaykhlf           #+#    #+#             */
-/*   Updated: 2025/09/05 11:35:21 by yaykhlf          ###   ########.fr       */
+/*   Updated: 2025/09/20 17:34:58 by yaykhlf          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "cube.h"
 
-static void	apply_rotation(t_player *player, double rot_speed)
+void	apply_rotation(t_player *player, double rot_speed)
 {
 	double	old_dir_x;
 	double	old_plane_x;
@@ -38,7 +38,7 @@ static int	is_wall(t_game *game, int x, int y)
 	return (game->map.grid.items[y][x] == '1');
 }
 
-static void	apply_movement(t_game *game, double move_x, double move_y)
+void	apply_movement(t_game *game, double move_x, double move_y)
 {
 	double	next_x;
 	double	next_y;
@@ -53,25 +53,34 @@ static void	apply_movement(t_game *game, double move_x, double move_y)
 
 static void	handle_forward_backward(t_game *game)
 {
-	if (game->input.move_fwd)
+	if (game->input.move_fwd && game->input.move_back)
+	{
+		if (game->input.last_vertical_move == DIR_FORWARD)
+		{
+			apply_movement(game, game->player.dir_x * MOVE_SPEED,
+				game->player.dir_y * MOVE_SPEED);
+		}
+		else if (game->input.last_vertical_move == DIR_BACKWARD)
+		{
+			apply_movement(game, -game->player.dir_x * MOVE_SPEED,
+				-game->player.dir_y * MOVE_SPEED);
+		}
+	}
+	else if (game->input.move_fwd)
+	{
 		apply_movement(game, game->player.dir_x * MOVE_SPEED,
 			game->player.dir_y * MOVE_SPEED);
-	if (game->input.move_back)
+	}
+	else if (game->input.move_back)
+	{
 		apply_movement(game, -game->player.dir_x * MOVE_SPEED,
 			-game->player.dir_y * MOVE_SPEED);
+	}
 }
 
 void	update_player_state(t_game *game)
 {
-	if (game->input.rot_left)
-		apply_rotation(&game->player, -ROT_SPEED);
-	if (game->input.rot_right)
-		apply_rotation(&game->player, ROT_SPEED);
+	handle_rotation(game);
 	handle_forward_backward(game);
-	if (game->input.move_left)
-		apply_movement(game, -game->player.plane_x * MOVE_SPEED,
-			-game->player.plane_y * MOVE_SPEED);
-	if (game->input.move_right)
-		apply_movement(game, game->player.plane_x * MOVE_SPEED,
-			game->player.plane_y * MOVE_SPEED);
+	handle_strafe_movement(game);
 }
