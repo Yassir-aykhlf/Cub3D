@@ -64,7 +64,6 @@ void	cast_single_ray(t_game *game)
 {
 	t_ray	ray;
 
-	clear_screen(game);
 	init_ray(&ray, &game->player, WINDOW_WIDTH / 2);
 	calculate_dda_step_and_side_dist(&ray, &game->player);
 	perform_dda(&ray, game);
@@ -79,7 +78,6 @@ void	cast_all_rays(t_game *game)
 	t_ray	ray;
 	int		x;
 
-	clear_screen(game);
 	x = 0;
 	while (x < WINDOW_WIDTH)
 	{
