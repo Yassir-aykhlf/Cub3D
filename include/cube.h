@@ -25,6 +25,7 @@
 # include <sys/time.h>
 # include <math.h>
 
+# define ERR_HEADER "Error\n"
 # define WINDOW_WIDTH 1920
 # define WINDOW_HEIGHT 1080
 # define TARGET_FPS 60
@@ -234,7 +235,8 @@ typedef struct s_lexer_state
 
 /* Window management functions */
 int				init_window(t_window *window, int width,
-					int height, char *title);
+					int height);
+int				spawn_window(t_window *window, char *title);
 void			cleanup_window(t_window *window);
 
 /* Game management functions */
@@ -370,6 +372,7 @@ int				flood_fill_validate(t_map *map, int **visited, int x, int y);
 int				log_map_not_enclosed(void);
 
 /* Loggers */
+void			log_system_error(const char *resource);
 int				log_missing(const char *missing_label);
 int				throw_error_on_failure(const char *element,
 					t_game *game,

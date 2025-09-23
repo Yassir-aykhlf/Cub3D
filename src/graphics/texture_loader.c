@@ -19,10 +19,7 @@ static int	load_texture_image(t_game *game, int tex_type, char *path)
 			&game->textures[tex_type].width,
 			&game->textures[tex_type].height);
 	if (game->textures[tex_type].img_ptr == NULL)
-	{
-		print_error_header();
-		printf("./cube3d: %s: %s\n", path, strerror(errno));
-	}
+		log_system_error(path);
 	return (game->textures[tex_type].img_ptr != NULL);
 }
 

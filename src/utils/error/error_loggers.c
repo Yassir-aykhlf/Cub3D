@@ -12,15 +12,23 @@
 
 #include "cube.h"
 
-void	print_error_header(void)
+void	log_system_error(const char *resource)
 {
-	printf("Error\n");
+	char	*error;
+
+	error = strerror(errno);
+	if (error)
+	{
+		if (resource)
+			printf(ERR_HEADER"./Cub3d: %s: %s\n", resource, error);
+		else
+			printf(ERR_HEADER"./Cub3d: %s\n", error);
+	}
 }
 
 int	log_missing(const char *missing_label)
 {
-	print_error_header();
-	printf("%s is actually missing,"
+	printf(ERR_HEADER"%s is actually missing,"
 		" please add up this configuration "
 		"field before trying to use the config.\n",
 		missing_label);
@@ -29,8 +37,7 @@ int	log_missing(const char *missing_label)
 
 int	log_duplication_error(const char *duplication_label)
 {
-	print_error_header();
-	printf("Duplicated %ss are not allowed, please use one %s\n",
+	printf(ERR_HEADER"Duplicated %ss are not allowed, please use one %s\n",
 		duplication_label,
 		duplication_label);
 	return (CUBE_FAILURE);
@@ -46,8 +53,7 @@ int	throw_error_on_failure(const char *element,
 	code = CUBE_SUCCESS;
 	if (!proc)
 	{
-		print_error_header();
-		printf("Unknown identifier: `%s`\n", element);
+		printf(ERR_HEADER"Unknown identifier: `%s`\n", element);
 		code = (CUBE_FAILURE);
 	}
 	else
@@ -55,8 +61,7 @@ int	throw_error_on_failure(const char *element,
 		code = proc(game, lexer);
 		if (code != CUBE_SUCCESS)
 		{
-			print_error_header();
-			printf("Failed to parse %s\n",
+			printf(ERR_HEADER"Failed to parse %s\n",
 				element);
 		}
 	}
@@ -65,8 +70,7 @@ int	throw_error_on_failure(const char *element,
 
 int	log_map_not_enclosed(void)
 {
-	print_error_header();
-	printf("Map is not properly enclosed by walls. "
+	printf(ERR_HEADER"Map is not properly enclosed by walls. "
 		"Player can escape to undefined areas.\n");
 	return (CUBE_FAILURE);
 }

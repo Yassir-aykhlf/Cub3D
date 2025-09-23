@@ -12,27 +12,6 @@
 
 #include <cube.h>
 
-static int	parse_and_validate_config(t_game *game);
-
-int	init_game(t_game *game)
-{
-	if (!parse_and_validate_config(game))
-		return (0);
-	if (!init_window(&game->window, WINDOW_WIDTH, WINDOW_HEIGHT, "Cub3d"))
-		return (0);
-	if (!init_screen_buffer(game))
-		return (0);
-	ft_memset(game->textures, 0, sizeof(game->textures));
-	if (!init_textures(game))
-		return (0);
-	if (!init_player(game))
-		return (0);
-	ft_memset(&game->input, 0, sizeof(t_input));
-	game->running = 1;
-	gettimeofday(&game->last_frame_time, NULL);
-	return (1);
-}
-
 static int	parse_and_validate_config(t_game *game)
 {
 	t_lines			lines;
@@ -44,7 +23,7 @@ static int	parse_and_validate_config(t_game *game)
 	lexer.lines = &lines;
 	if (!read_file_into_lines(lexer.lines, game->map.config_file_path))
 	{
-		perror("cub3d");
+		log_system_error(game->map.config_file_path);
 		return (0);
 	}
 	code = parse_game_config(game, &lexer);
@@ -54,6 +33,27 @@ static int	parse_and_validate_config(t_game *game)
 		cleanup_game(game);
 		return (0);
 	}
+	return (1);
+}
+
+int	init_game(t_game *game)
+{
+	if (!parse_and_validate_config(game))
+		return (0);
+	if (!init_window(&game->window, WINDOW_WIDTH, WINDOW_HEIGHT))
+		return (0);
+	if (!init_screen_buffer(game))
+		return (0);
+	ft_memset(game->textures, 0, sizeof(game->textures));
+	if (!init_textures(game))
+		return (0);
+	if (!init_player(game))
+		return (0);
+	ft_memset(&game->input, 0, sizeof(t_input));
+	if (!spawn_window(&game->window, "Cub3d"))
+		return (0);
+	game->running = 1;
+	gettimeofday(&game->last_frame_time, NULL);
 	return (1);
 }
 

@@ -12,19 +12,26 @@
 
 #include "cube.h"
 
-int	init_window(t_window *window, int width, int height, char *title)
+int	spawn_window(t_window *window, char *title)
+{
+	window->window = mlx_new_window(window->mlx_ptr,
+			window->width,
+			window->height, title);
+	if (!window->window)
+	{
+		destroy_connection(window->mlx_ptr);
+		return (0);
+	}
+	return (1);
+}
+
+int	init_window(t_window *window, int width, int height)
 {
 	window->mlx_ptr = mlx_init();
 	if (!window->mlx_ptr)
 		return (0);
 	window->width = width;
 	window->height = height;
-	window->window = mlx_new_window(window->mlx_ptr, width, height, title);
-	if (!window->window)
-	{
-		destroy_connection(window->mlx_ptr);
-		return (0);
-	}
 	return (1);
 }
 
