@@ -29,10 +29,7 @@ static int	parse_and_validate_config(t_game *game)
 	code = parse_game_config(game, &lexer);
 	destroy_lines(lexer.lines);
 	if (code != CUBE_SUCCESS || validate_map(&game->map) == CUBE_FAILURE)
-	{
-		cleanup_game(game);
 		return (0);
-	}
 	return (1);
 }
 

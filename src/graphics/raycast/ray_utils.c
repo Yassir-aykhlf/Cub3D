@@ -60,19 +60,6 @@ void	calculate_dda_step_and_side_dist(t_ray *ray, t_player *player)
 	}
 }
 
-void	cast_single_ray(t_game *game)
-{
-	t_ray	ray;
-
-	init_ray(&ray, &game->player, WINDOW_WIDTH / 2);
-	calculate_dda_step_and_side_dist(&ray, &game->player);
-	perform_dda(&ray, game);
-	calculate_wall_distance(&ray, &game->player);
-	if (game->textures[0].img_ptr)
-		calculate_texture_coordinates(&ray, &game->player);
-	draw_vertical_line(game, &ray, WINDOW_WIDTH / 2);
-}
-
 void	cast_all_rays(t_game *game)
 {
 	t_ray	ray;
@@ -85,8 +72,7 @@ void	cast_all_rays(t_game *game)
 		calculate_dda_step_and_side_dist(&ray, &game->player);
 		perform_dda(&ray, game);
 		calculate_wall_distance(&ray, &game->player);
-		if (game->textures[0].img_ptr)
-			calculate_texture_coordinates(&ray, &game->player);
+		calculate_texture_coordinates(&ray, &game->player);
 		draw_vertical_line(game, &ray, x);
 		x++;
 	}

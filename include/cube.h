@@ -31,7 +31,6 @@
 # define TARGET_FPS 60
 # define MSEC_PER_FRAME 16666
 # define MSEC 1000000
-
 # define CAMERA_PLANE_DISTANCE 0.66
 
 # define ESC_KEY 65307
